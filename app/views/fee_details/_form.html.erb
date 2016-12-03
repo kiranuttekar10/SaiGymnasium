@@ -1,0 +1,15 @@
+<%= simple_form_for(@fee_detail) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <%= f.association :member %>
+    <%= f.input :fee_date %>
+    <%= f.input :fee_amount %>
+    <%= f.input :pending_fee %>
+    <%= f.input :fee_paid %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

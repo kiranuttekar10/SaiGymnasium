@@ -16,3 +16,7 @@
 .form-horizontal .control-label {
     text-align: left;
 }
+
+.navbar-brand {
+    padding:0px 0px 0px 0px;
+}

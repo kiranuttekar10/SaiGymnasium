@@ -16,6 +16,8 @@ gem 'therubyracer'
 
 gem 'devise'
 
+gem 'pg'
+
 gem 'less-rails'
 
 gem 'twitter-bootstrap-rails'

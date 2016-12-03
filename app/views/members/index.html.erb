@@ -11,7 +11,7 @@
       <th><%= model_class.human_attribute_name(:next_fee_date) %></th>
       <th><%= model_class.human_attribute_name(:status) %></th>
       <th><%= model_class.human_attribute_name(:amount) %></th>
-      <th><%= model_class.human_attribute_name(:created_at) %></th>
+      
       <th><%=t '.actions', :default => t("helpers.actions") %></th>
     </tr>
   </thead>
@@ -24,8 +24,9 @@
         <td><%= member.next_fee_date %></td>
         <td><%= member.status %></td>
         <td><%= member.amount %></td>
-        <td><%=l member.created_at %></td>
         <td>
+          <%= link_to 'Fee Pay',
+                       {:controller => 'fee_details',:action => 'new' , :id => member}, :class => 'btn btn-default btn-xs' %>
           <%= link_to t('.edit', :default => t("helpers.links.edit")),
                       edit_member_path(member), :class => 'btn btn-default btn-xs' %>
           <%= link_to t('.destroy', :default => t("helpers.links.destroy")),

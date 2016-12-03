@@ -5,11 +5,20 @@ class MembersController < ApplicationController
   # GET /members.json
   def index
     @members = Member.all
+    
   end
 
   # GET /members/1
   # GET /members/1.json
   def show
+    if @member.fee_details.any?
+        fee = @member.fee_details.last
+      if @member.next_fee_date < Date.today
+        if fee.date < @member.last_fee_date
+          @member.Unpaid!
+        end
+      end
+    end
   end
 
   # GET /members/new
@@ -25,7 +34,9 @@ class MembersController < ApplicationController
   # POST /members.json
   def create
     @member = Member.new(member_params)
-
+    @member.last_fee_date = @member.admission_date
+    @member.next_fee_date = @member.admission_date + 31.days
+    
     respond_to do |format|
       if @member.save
         format.html { redirect_to @member, notice: 'Member was successfully created.' }
@@ -69,6 +80,6 @@ class MembersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def member_params
-      params.require(:member).permit(:name, :last_fee_date, :next_fee_date, :status, :amount)
+      params.require(:member).permit(:name, :admission_date, :status, :amount)
     end
 end
