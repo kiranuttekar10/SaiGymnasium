@@ -5,7 +5,25 @@ class MembersController < ApplicationController
   # GET /members.json
   def index
     @members = Member.all
-    
+    @members.each do |member|
+      if member.next_fee_date < Date.today || member.fee_details.last.fee_amount != member.fee_details.last.fee_paid || member.fee_details.last.fee_paid == nil
+      
+       member.Unpaid!
+      
+      end
+    end
+  end
+  
+  def pending_fee
+    @membersall = Member.all
+    @members =[ ]
+    @membersall.each do |member|
+      if member.next_fee_date < Date.today || member.fee_details.last.fee_amount != member.fee_details.last.fee_paid || member.fee_details.last.fee_paid == nil
+      
+          @members << member
+      
+      end
+    end
   end
 
   # GET /members/1
@@ -13,10 +31,10 @@ class MembersController < ApplicationController
   def show
     if @member.fee_details.any?
         fee = @member.fee_details.last
-      if @member.next_fee_date < Date.today
-        if fee.date < @member.last_fee_date
+      if @member.next_fee_date < Date.today || fee.fee_amount != fee.fee_paid || fee.fee_paid == nil
+        
           @member.Unpaid!
-        end
+      
       end
     end
   end
@@ -28,6 +46,13 @@ class MembersController < ApplicationController
 
   # GET /members/1/edit
   def edit
+  end
+  
+  #GET /members/fee_records/1
+  def fee_records
+    @member = Member.find(params[:id])
+    
+    @fee_details = @member.fee_details.order('created_at desc')
   end
 
   # POST /members

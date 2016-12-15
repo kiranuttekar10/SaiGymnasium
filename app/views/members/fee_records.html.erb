@@ -1,0 +1,35 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Fee Details</h1>
+
+<table class="table table-responsive table-hover">
+  <thead>
+    <tr>
+      <th>Member</th>
+      <th>Date of Paying Fee</th>
+      <th>Total Fee amount</th>
+      <th>Pending fee</th>
+      <th>Fee paid</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @fee_details.each do |fee_detail| %>
+      <tr>
+        <td><%= fee_detail.member_id %></td>
+        <td><%= fee_detail.fee_date %></td>
+        <td><%= fee_detail.fee_amount %></td>
+        <td><%= fee_detail.pending_fee %></td>
+        <td><%= fee_detail.fee_paid %></td>
+        <td><%= link_to 'Show', fee_detail ,class: "btn btn-info btn-xs"%>
+        <% if fee_detail.fee_paid != fee_detail.fee_amount || fee_detail.fee_paid == nil %> 
+        <%= link_to 'Edit', edit_fee_detail_path(fee_detail),class: "btn btn-default btn-xs" %>
+        <% end %>
+        <%= link_to 'Delete', fee_detail, method: :delete, data: { confirm: 'Are you sure?' },class: "btn btn-danger btn-xs" %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>

@@ -13,10 +13,18 @@
  *= require_tree .
  *= require_self
  */
+body {
+    margin-top:0px;
+} 
+ 
 .form-horizontal .control-label {
     text-align: left;
 }
 
 .navbar-brand {
     padding:0px 0px 0px 0px;
+}
+
+.nav.navbar-nav li a {
+    color:white;
 }

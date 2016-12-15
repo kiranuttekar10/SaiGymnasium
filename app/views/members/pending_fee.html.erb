@@ -15,6 +15,10 @@
       <th><%=t '.actions', :default => t("helpers.actions") %></th>
     </tr>
   </thead>
+  
+<% if @members.blank? %>
+  <p>There are no members with pending fee.</p>
+<% else %>
   <tbody>
     <% @members.each do |member| %>
       <tr>
@@ -42,6 +46,7 @@
       </tr>
     <% end %>
   </tbody>
+<% end%>
 </table>
 
 <%= link_to t('.new', :default => t("helpers.links.new")),

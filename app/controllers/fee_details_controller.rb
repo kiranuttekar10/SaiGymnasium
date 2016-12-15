@@ -34,7 +34,14 @@ class FeeDetailsController < ApplicationController
 
     respond_to do |format|
       if @fee_detail.save
+        if @fee_detail.fee_amount == @fee_detail.fee_paid
         @member.Paid!
+        end
+        if @member.admission_date < 1.month.ago
+        @member.last_fee_date = @member.next_fee_date
+        @member.next_fee_date = @member.next_fee_date + 1.month
+        end
+        @member.save
         format.html { redirect_to @fee_detail, notice: 'Fee detail was successfully created.' }
         format.json { render :show, status: :created, location: @fee_detail }
       else
@@ -49,6 +56,10 @@ class FeeDetailsController < ApplicationController
   def update
     respond_to do |format|
       if @fee_detail.update(fee_detail_params)
+        @member= Member.find(@fee_detail.member_id)
+        if @fee_detail.fee_amount == @fee_detail.fee_paid
+        @member.Paid!
+        end
         format.html { redirect_to @fee_detail, notice: 'Fee detail was successfully updated.' }
         format.json { render :show, status: :ok, location: @fee_detail }
       else
