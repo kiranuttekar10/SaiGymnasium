@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  devise_for :users
   resources :fee_details , except: [:new]
   root 'members#index'
   get 'members/pending_fee',to: 'members#pending_fee'

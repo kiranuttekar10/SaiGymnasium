@@ -1,15 +1,26 @@
 class MembersController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_member, only: [:show, :edit, :update, :destroy]
 
   # GET /members
   # GET /members.json
   def index
-    @members = Member.all
-    @members.each do |member|
-      if member.next_fee_date < Date.today || member.fee_details.last.fee_amount != member.fee_details.last.fee_paid || member.fee_details.last.fee_paid == nil
-      
-       member.Unpaid!
-      
+    if params[:search]
+      @members = Member.search(params[:search])
+    else  
+      @members = Member.all
+      @members.each do |member|
+        if member.fee_details.any? 
+          if member.next_fee_date < Date.today  || member.fee_details.last.fee_paid == nil
+          
+           member.Unpaid!
+          
+          elsif  member.fee_details.last.fee_amount != member.fee_details.last.fee_paid
+           member.Partial!
+          else
+           member.Paid!
+          end
+        end
       end
     end
   end
@@ -18,10 +29,14 @@ class MembersController < ApplicationController
     @membersall = Member.all
     @members =[ ]
     @membersall.each do |member|
+      if member.fee_details.any?
       if member.next_fee_date < Date.today || member.fee_details.last.fee_amount != member.fee_details.last.fee_paid || member.fee_details.last.fee_paid == nil
       
           @members << member
       
+      end
+     else
+          @members << member
       end
     end
   end
@@ -31,10 +46,14 @@ class MembersController < ApplicationController
   def show
     if @member.fee_details.any?
         fee = @member.fee_details.last
-      if @member.next_fee_date < Date.today || fee.fee_amount != fee.fee_paid || fee.fee_paid == nil
+      if @member.next_fee_date < Date.today  || fee.fee_paid == nil
         
           @member.Unpaid!
       
+      elsif  fee.fee_amount != fee.fee_paid
+         @member.Partial!
+      else
+         @member.Paid!
       end
     end
   end
@@ -59,8 +78,13 @@ class MembersController < ApplicationController
   # POST /members.json
   def create
     @member = Member.new(member_params)
-    @member.last_fee_date = @member.admission_date
-    @member.next_fee_date = @member.admission_date + 31.days
+    if @member.amount == 500
+      @member.last_fee_date = @member.admission_date
+      @member.next_fee_date = @member.admission_date + 31.days
+    elsif @member.amount == 1100
+      @member.last_fee_date = @member.admission_date
+      @member.next_fee_date = @member.admission_date + 3.month
+    end
     
     respond_to do |format|
       if @member.save

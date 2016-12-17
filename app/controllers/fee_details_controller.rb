@@ -1,4 +1,5 @@
 class FeeDetailsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_fee_detail, only: [:show, :edit, :update, :destroy]
 
   # GET /fee_details
@@ -37,9 +38,16 @@ class FeeDetailsController < ApplicationController
         if @fee_detail.fee_amount == @fee_detail.fee_paid
         @member.Paid!
         end
-        if @member.admission_date < 1.month.ago
-        @member.last_fee_date = @member.next_fee_date
-        @member.next_fee_date = @member.next_fee_date + 1.month
+        if @member.admission_date < 1.month.ago 
+          if @fee_detail.fee_amount == 400
+            @member.last_fee_date = @member.next_fee_date
+            @member.next_fee_date = @member.next_fee_date + 1.month
+          elsif @fee_detail.fee_amount == 1000
+            @member.last_fee_date = @member.next_fee_date
+            @member.next_fee_date = @member.next_fee_date + 3.month
+          else
+          end
+          
         end
         @member.save
         format.html { redirect_to @fee_detail, notice: 'Fee detail was successfully created.' }

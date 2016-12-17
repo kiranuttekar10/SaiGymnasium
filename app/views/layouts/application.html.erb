@@ -11,22 +11,32 @@
   <body>
     <nav class="navbar navbar-inverse navbar-static-top">
       <div class="container-fluid">
-        
         <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-2">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
           <a class="navbar-brand" href="#"><%= image_tag('saigymlogo.jpg' , :size => '100x50') %></a>
         </div>
-        
-        <ul class="nav navbar-nav">
-          <li class="active"><%= link_to 'Members', '/members' %></li>
-          <li><a href="/fee_details">Fee Details</a></li>
-          <li><a href="/members/pending_fee">Pending Fees</a></li>
-          <li><a href="#">Page 3</a></li>
-        </ul>
-        
+      
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">  
+          <ul class="nav navbar-nav">
+            <li class="active"><%= link_to 'Members', '/members' %></li>
+            <li><a href="/fee_details">Fee Details</a></li>
+            <li><a href="/members/pending_fee">Pending Fees</a></li>
+            <li><a href="#">Page 3</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li><%= link_to "Sign Out",destroy_user_session_path,method: :delete %></li>
+          </ul>
+        </div>  
       </div>
     </nav>
     
     <div class="container">
+    <div id="flash"><%= bootstrap_flash %></div>
       <%= yield %>
     </div>
   </body>

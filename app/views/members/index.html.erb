@@ -2,6 +2,14 @@
 <div class="page-header">
   <h1><%=t '.title', :default => model_class.model_name.human.pluralize.titleize %></h1>
 </div>
+<%= form_tag members_path, :method => 'get' do %>
+        
+        <div>
+        <div >Name of member: </div>
+            <%= text_field_tag :search, params[:search] %>
+            <%= submit_tag "Search", :name => nil %>
+       </div>
+<% end %>
 <table class="table table-striped">
   <thead>
     <tr>
@@ -29,6 +37,11 @@
           <%= link_to 'Fee Pay',
                        {:controller => 'fee_details',:action => 'new' , :id => member}, :class => 'btn btn-default btn-xs' %>
           <% end %>
+          <% if member.Partial? %>
+          <%= link_to 'Pay Remaining Fee',
+                       edit_fee_detail_path(member.fee_details.last.id), :class => 'btn btn-default btn-xs' %>
+          <% end %>
+          
           <%= link_to t('.edit', :default => t("helpers.links.edit")),
                       edit_member_path(member), :class => 'btn btn-default btn-xs' %>
           <%= link_to 'Fee Records',

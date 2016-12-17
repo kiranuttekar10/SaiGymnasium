@@ -15,6 +15,8 @@ gem 'therubyracer'
 
 gem 'devise'
 
+gem 'will_paginate'
+
 gem 'pg'
 
 gem 'less-rails'
