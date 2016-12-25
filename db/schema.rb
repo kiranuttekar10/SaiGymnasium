@@ -15,16 +15,6 @@ ActiveRecord::Schema.define(version: 20161217093432) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "fee_details", force: :cascade do |t|
-    t.integer  "member_id"
-    t.date     "fee_date"
-    t.integer  "fee_amount"
-    t.integer  "pending_fee"
-    t.integer  "fee_paid"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
-  end
-
   create_table "members", force: :cascade do |t|
     t.string   "name"
     t.date     "admission_date"

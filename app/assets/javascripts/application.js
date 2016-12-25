@@ -11,7 +11,19 @@
 // about supported directives.
 //
 //= require jquery
+//= require jquery.turbolinks
 //= require jquery_ujs
+//= require jquery-ui
 //= require twitter/bootstrap
 //= require turbolinks
 //= require_tree .
+$ready = 
+// functions
+document.addEventListener("turbolinks:load", function(){
+  $("#search-member-autocomplete").autocomplete({
+    source: '/members/autocomplete.json'
+  })
+})
+
+$(document).ready(ready)
+$(document).on('page:load', ready)

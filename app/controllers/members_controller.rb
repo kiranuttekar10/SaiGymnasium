@@ -10,18 +10,26 @@ class MembersController < ApplicationController
     else  
       @members = Member.all
       @members.each do |member|
-        if member.fee_details.any? 
-          if member.next_fee_date < Date.today  || member.fee_details.last.fee_paid == nil
+        
+          if member.next_fee_date < Date.today 
           
            member.Unpaid!
           
-          elsif  member.fee_details.last.fee_amount != member.fee_details.last.fee_paid
-           member.Partial!
           else
            member.Paid!
           end
-        end
+        
       end
+    end
+  end
+  
+  def autocomplete
+    @members = Member.order(:name).where('lower(name) LIKE ?',"%#{params[:term]}%".downcase)
+    respond_to do |format|
+      format.html
+      format.json {
+        render json: @members.map(&:name).to_json
+      }
     end
   end
   
@@ -29,14 +37,20 @@ class MembersController < ApplicationController
     @membersall = Member.all
     @members =[ ]
     @membersall.each do |member|
-      if member.fee_details.any?
-      if member.next_fee_date < Date.today || member.fee_details.last.fee_amount != member.fee_details.last.fee_paid || member.fee_details.last.fee_paid == nil
+      
+      if member.next_fee_date < Date.today 
       
           @members << member
-      
       end
-     else
-          @members << member
+    end
+  end
+  
+  def upcoming_fee
+    @membersall =Member.all
+    @members = []
+    @membersall.each do |member|
+      if member.next_fee_date < (Date.today + 4.days) && member.Paid!
+        @members << member
       end
     end
   end
@@ -44,18 +58,14 @@ class MembersController < ApplicationController
   # GET /members/1
   # GET /members/1.json
   def show
-    if @member.fee_details.any?
-        fee = @member.fee_details.last
-      if @member.next_fee_date < Date.today  || fee.fee_paid == nil
+    
+      if @member.next_fee_date < Date.today 
         
           @member.Unpaid!
-      
-      elsif  fee.fee_amount != fee.fee_paid
-         @member.Partial!
       else
          @member.Paid!
       end
-    end
+    
   end
 
   # GET /members/new
@@ -67,12 +77,6 @@ class MembersController < ApplicationController
   def edit
   end
   
-  #GET /members/fee_records/1
-  def fee_records
-    @member = Member.find(params[:id])
-    
-    @fee_details = @member.fee_details.order('created_at desc')
-  end
 
   # POST /members
   # POST /members.json
@@ -84,6 +88,12 @@ class MembersController < ApplicationController
     elsif @member.amount == 1100
       @member.last_fee_date = @member.admission_date
       @member.next_fee_date = @member.admission_date + 3.month
+    elsif @member.amount == 400
+      @member.last_fee_date = @member.next_fee_date
+      @member.next_fee_date = @member.next_fee_date + 31.days
+    else
+      @member.last_fee_date = @member.next_fee_date
+      @member.next_fee_date = @member.next_fee_date + 3.month
     end
     
     respond_to do |format|

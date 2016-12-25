@@ -10,11 +10,15 @@
  * files in this directory. Styles in this file should be added after the last require_* statement.
  * It is generally better to create a new file per style scope.
  *
+ *= require jquery-ui
  *= require_tree .
  *= require_self
  */
 body {
     margin-top:0px;
+    margin-left:0px;
+    margin-right:0px; 
+    
 } 
  
 .form-horizontal .control-label {
@@ -27,4 +31,46 @@ body {
 
 .nav.navbar-nav li a {
     color:white;
+    font-size:1em;
+    padding-top:30px;
+}
+.border {
+    border:2px solid black;
+    border-radius:5px;
+    box-shadow:5px 5px 5px 5px;
+    padding:200px 10px 300px 10px;
+    margin-top:100px;
+    font-size:20px;
+    
+}
+.navbar.navbar-static-top.navbar-inverse {
+  height:6em;
+  
+}
+.checkbox label  {
+    color:white;
+}
+.has-error .help-block {
+    color:white;
+}
+p {
+    margin-left:10px;
+}
+.highlight-label {
+    color:white;
+    border-radius:2px;
+    padding:5px 5px 5px 5px;
+    
+
+}
+.inner-box {
+    border:2px dotted black;
+    border-radius:5px;
+    padding:20px 10px 40px 10px;
+    background-color:	#2F4F4F;
+}
+input[type="text"], input[type="password"], input[type="date"], input[type="datetime"], input[type="datetime-local"], input[type="month"], input[type="week"], input[type="email"], input[type="number"], input[type="search"], input[type="tel"], input[type="time"], input[type="url"], textarea {
+  font-size: 1em;
+  height:2.5em;
+ 
 }
