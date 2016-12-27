@@ -20,7 +20,20 @@ body {
     margin-right:0px; 
     
 } 
- 
+#button-style-paid {
+    border:1px solid black;
+    border-radius:2px;
+    color:white;
+    background-color:green; 
+    padding:2px 2px 2px 2px;
+}
+#button-style-unpaid {
+    border:1px solid black;
+    border-radius:2px;
+    color:white;
+    background-color:red; 
+    padding:2px 2px 2px 2px;
+}
 .form-horizontal .control-label {
     text-align: left;
 }
@@ -32,7 +45,7 @@ body {
 .nav.navbar-nav li a {
     color:white;
     font-size:1em;
-    padding-top:30px;
+    
 }
 .border {
     border:2px solid black;
@@ -43,10 +56,7 @@ body {
     font-size:20px;
     
 }
-.navbar.navbar-static-top.navbar-inverse {
-  height:6em;
-  
-}
+
 .checkbox label  {
     color:white;
 }
@@ -73,4 +83,13 @@ input[type="text"], input[type="password"], input[type="date"], input[type="date
   font-size: 1em;
   height:2.5em;
  
+}
+.form-custom {
+    border:2px solid gray;
+    border-radius:5px;
+    padding:5px 5px 5px 5px;
+}
+.form-horizontal .form-group {
+    margin-left:0px;
+    margin-right:0px;
 }

@@ -7,7 +7,7 @@ $(function(){
 </script>
 <%- model_class = Member -%>
 <div class="page-header">
-  <h1><%=t '.title', :default => model_class.model_name.human.pluralize.titleize %></h1>
+  <h3><%=t '.title', :default => model_class.model_name.human.pluralize.titleize %></h3>
 </div>
 <%= form_tag members_path, :method => 'get' do %>
         
@@ -18,15 +18,13 @@ $(function(){
        </div>
 <% end %>
 <hr/>
-<table class="table table-striped">
+<table class="table table-responsive table-striped">
   <thead>
     <tr>
       <th><%= model_class.human_attribute_name(:id) %></th>
       <th><%= model_class.human_attribute_name(:name) %></th>
-      <th><%= model_class.human_attribute_name(:last_fee_date) %></th>
-      <th><%= model_class.human_attribute_name(:next_fee_date) %></th>
       <th><%= model_class.human_attribute_name(:status) %></th>
-      <th><%= model_class.human_attribute_name(:amount) %></th>
+      
       
       <th><%=t '.actions', :default => t("helpers.actions") %></th>
     </tr>
@@ -36,19 +34,19 @@ $(function(){
       <tr>
         <td><%= link_to member.id, member_path(member) %></td>
         <td><%= member.name %></td>
-        <td><%= member.last_fee_date %></td>
-        <td><%= member.next_fee_date %></td>
-        <td><%= member.status %></td>
-        <td><%= member.amount %></td>
+        <% if member.Unpaid? %>
+        <td ><span id="button-style-unpaid"><%= member.status %></span></td>
+        <% else %>
+        <td ><span id="button-style-paid"><%= member.status %></span></td>
+        <% end %>
         <td>
           <% if member.next_fee_date < Date.today || member.Unpaid? %>
           <%= link_to 'Fee Pay',
-                       {:controller => 'fee_details',:action => 'new' , :id => member}, :class => 'btn btn-default btn-xs' %>
+                      {:controller => 'members',:action => 'fee_pay',:id => member}, :class => 'btn btn-default btn-xs' %>
           <% end %>
          
           
-          <%= link_to t('.edit', :default => t("helpers.links.edit")),
-                      edit_member_path(member), :class => 'btn btn-default btn-xs' %>
+        
           
           <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
                       member_path(member),
@@ -64,3 +62,4 @@ $(function(){
 <%= link_to t('.new', :default => t("helpers.links.new")),
             new_member_path,
             :class => 'btn btn-primary' %>
+<hr/>

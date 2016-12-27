@@ -3,7 +3,7 @@ Rails.application.routes.draw do
  
   root 'members#index'
   #get 'members/pending_fee',to: 'members#pending_fee'
-  
+  get 'members/fee_pay/:id' => 'members#fee_pay'
  
   resources :members do
     collection {get :autocomplete}

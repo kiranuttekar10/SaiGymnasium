@@ -1,0 +1,96 @@
+<script>
+$(document).ready(function(){
+$('#new').click(function(){
+   
+    if($('.containernew').css("display") == "none" )
+    {
+    $('.containerold').hide();
+    $('.containernew').show();
+    
+    }
+    else
+    {
+     alert("You are already on the New Admission form");
+    }
+});
+$('#old').click(function(){
+    if($('.containerold').css("display") == "none")
+    {
+    $('.containernew').hide();
+    $('.containerold').show();
+    }
+    else
+    {
+     alert("You are already on the Old Admission form");
+    }
+});
+});
+</script>
+<div class="row">
+    <div class="col-xs-12">
+        <div class="col-xs-6">
+            <button id="new">For New Admission</button> 
+        </div>  
+        <div class="col-xs-6">
+            <button id="old">Regular Members</button>   
+        </div> 
+    </div>
+</div>
+
+<div class="containernew" style="display:none;">
+    <hr/>
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="page-header">
+            <h4>New Members Fee</h4>
+            </div>
+            <p><strong>Member Name : </strong><%= @member.name %></p>
+            <p><strong>Admission Date : </strong><%= @member.admission_date %></p>
+        </div>
+    </div> 
+    <div class="row">
+        <div class="col-xs-10 col-xs-offset-1 form-custom"> 
+            <div class="page-header"><h4>Fill the form</h4></div>
+            <%= simple_form_for @member, :html => { :class => 'form-horizontal' } do |f| %>
+              
+              <%= f.input :status,as: :select,collection: [['Unpaid','Unpaid'],['Paid','Paid']],include_blank: false,prompt: "Please Select Status or it will be automatically set" %>
+              <%= f.input :amount,as: :select,collection: [['500',500],['1100',1100]],include_blank: false,prompt: "Please select the amount" %>
+              
+            <hr/>
+              <%= f.button :submit, :class => 'btn-primary btn-xs' %>
+              <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                        members_path, :class => 'btn btn-default btn-xs' %>
+            <% end %>
+        </div>
+    </div>
+      
+</div>
+
+
+<div class="containerold" style="display:none;">
+    <hr/>
+    <div class="row">   
+        <div class="col-xs-12" >
+            <div class="page-header">
+            <h4>Regular Members</h4>
+            </div>
+            <p><strong>Member Name : </strong><%= @member.name %></p>
+            <p><strong>Admission Date : </strong><%= @member.admission_date %></p>
+        </div>
+    </div> 
+    <div class="row">   
+        <div class="col-xs-10 col-xs-offset-1 form-custom" >
+            <div class="page-header"><h4>Fill the form</h4></div>
+            <%= simple_form_for @member, :html => { :class => 'form-horizontal' } do |f| %>
+              
+              <%= f.input :status,as: :select,collection: [['Unpaid','Unpaid'],['Paid','Paid']],include_blank: false,prompt: "Please Select Status or it will be automatically set" %>
+              <%= f.input :amount,as: :select,collection: [['400',400],['1000',1000]],include_blank: false %>
+              
+            <hr/>
+              <%= f.button :submit, :class => 'btn-primary btn-sm' %>
+              <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                            members_path, :class => 'btn btn-default btn-sm' %>
+            <% end %>
+        </div>
+    </div>
+</div>

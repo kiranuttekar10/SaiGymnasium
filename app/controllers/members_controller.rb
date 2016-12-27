@@ -61,9 +61,9 @@ class MembersController < ApplicationController
     
       if @member.next_fee_date < Date.today 
         
-          @member.Unpaid!
+        @member.Unpaid!
       else
-         @member.Paid!
+        @member.Paid!
       end
     
   end
@@ -77,7 +77,9 @@ class MembersController < ApplicationController
   def edit
   end
   
-
+  def fee_pay
+    @member = Member.find(params[:id]);
+  end
   # POST /members
   # POST /members.json
   def create
@@ -88,12 +90,12 @@ class MembersController < ApplicationController
     elsif @member.amount == 1100
       @member.last_fee_date = @member.admission_date
       @member.next_fee_date = @member.admission_date + 3.month
-    elsif @member.amount == 400
-      @member.last_fee_date = @member.next_fee_date
-      @member.next_fee_date = @member.next_fee_date + 31.days
-    else
-      @member.last_fee_date = @member.next_fee_date
-      @member.next_fee_date = @member.next_fee_date + 3.month
+  #  elsif @member.amount == 400
+  #   @member.last_fee_date = @member.next_fee_date
+  #   @member.next_fee_date = @member.next_fee_date + 31.days
+  #  else
+  #    @member.last_fee_date = @member.next_fee_date
+  #   @member.next_fee_date = @member.next_fee_date + 3.month
     end
     
     respond_to do |format|
@@ -110,8 +112,21 @@ class MembersController < ApplicationController
   # PATCH/PUT /members/1
   # PATCH/PUT /members/1.json
   def update
+    if params[:member][:amount] == 500
+      @member.last_fee_date = @member.admission_date
+      @member.next_fee_date = @member.admission_date + 31.days
+    elsif params[:member][:amount] == 1100
+      @member.last_fee_date = @member.admission_date
+      @member.next_fee_date = @member.admission_date + 3.month
+   elsif params[:member][:amount] == 400
+      @member.last_fee_date = @member.next_fee_date
+      @member.next_fee_date = @member.next_fee_date + 31.days
+   else
+    @member.last_fee_date = @member.next_fee_date
+    @member.next_fee_date = @member.next_fee_date + 3.month
+    end
     respond_to do |format|
-      if @member.update(member_params)
+      if @member.update(member_params) && @member.save
         format.html { redirect_to @member, notice: 'Member was successfully updated.' }
         format.json { render :show, status: :ok, location: @member }
       else

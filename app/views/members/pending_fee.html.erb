@@ -1,7 +1,7 @@
 
 <%- model_class = Member -%>
 <div class="page-header">
-  <h1><%=t '.title', :default => model_class.model_name.human.pluralize.titleize %></h1>
+  <h3>Pending Fees</h3>
 </div>
 <%= form_tag members_path, :method => 'get' do %>
         
@@ -12,15 +12,14 @@
        </div>
 <% end %>
 <hr/>
-<table class="table table-striped">
+<table class="table table-responsive table-striped">
   <thead>
     <tr>
-      <th><%= model_class.human_attribute_name(:id) %></th>
+      
       <th><%= model_class.human_attribute_name(:name) %></th>
-      <th><%= model_class.human_attribute_name(:last_fee_date) %></th>
       <th><%= model_class.human_attribute_name(:next_fee_date) %></th>
       <th><%= model_class.human_attribute_name(:status) %></th>
-      <th><%= model_class.human_attribute_name(:amount) %></th>
+      
       
       <th><%=t '.actions', :default => t("helpers.actions") %></th>
     </tr>
@@ -32,21 +31,18 @@
   <tbody>
     <% @members.each do |member| %>
       <tr>
-        <td><%= link_to member.id, member_path(member) %></td>
-        <td><%= member.name %></td>
-        <td><%= member.last_fee_date %></td>
-        <td><%= member.next_fee_date %></td>
+        
+        <td><%= link_to member.name, member_path(member) %></td>
+        <td><%= member.next_fee_date.strftime("%d-%m-%Y") %></td>
         <td><%= member.status %></td>
-        <td><%= member.amount %></td>
+        
         <td>
           <% if member.next_fee_date < Date.today || member.Unpaid? %>
           <%= link_to 'Fee Pay',
-                       {:controller => 'fee_details',:action => 'new' , :id => member}, :class => 'btn btn-default btn-xs' %>
+                       {:controller => 'members' , :action => 'fee_pay',:id => member} , :class => 'btn btn-default btn-xs' %>
           <% end %>
-          <%= link_to t('.edit', :default => t("helpers.links.edit")),
-                      edit_member_path(member), :class => 'btn btn-default btn-xs' %>
-          <%= link_to 'Fee Records',
-                      {:controller => 'members' ,:action => 'fee_records' , :id => member.id}, :class => 'btn btn-success btn-xs' %>
+         
+         
           <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
                       member_path(member),
                       :method => :delete,
