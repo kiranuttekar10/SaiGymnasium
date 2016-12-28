@@ -34,18 +34,29 @@ $(function(){
   <tbody>
     <% @members.each do |member| %>
       <tr>
-        <td><%= link_to member.id, member_path(member) %></td>
-        <td><%= member.name %></td>
-        
-        <td><%= member.next_fee_date.strftime("%d-%m-%Y") %></td>
-        <td><%= member.status %></td>
+        <td><%=  member.id %></td>
+        <td><%= link_to member.name, member_path(member) %></td>
+        <% if member.next_fee_date != nil %>
+        <td><%=link_to member.next_fee_date.strftime("%d-%m-%Y"), member_date_change_path(member)%></td>
+        <% else %>
+        <td></td>
+        <% end %>
+        <% if member.Unpaid? %>
+        <td ><span id="button-style-unpaid"><%= member.status %></span></td>
+        <% else %>
+        <td ><span id="button-style-paid"><%= member.status %></span></td>
+        <% end %>
         
         <td>
+          <% if member.next_fee_date != nil %>
           <% if member.next_fee_date < Date.today || member.Unpaid? %>
           <%= link_to 'Fee Pay',
                       {:controller =>'members',:action => 'fee_pay' , :id => member}, :class => 'btn btn-default btn-xs' %>
           <% end %>
-         
+          <% else %>
+          <%= link_to 'Fee Pay',
+                      {:controller =>'members',:action => 'fee_pay' , :id => member}, :class => 'btn btn-default btn-xs' %>
+          <% end %>
           
         
           

@@ -6,24 +6,49 @@
 <dl class="dl-horizontal">
   <dt><strong><%= model_class.human_attribute_name(:name) %>:</strong></dt>
   <dd><%= @member.name %></dd>
+<hr/>
   <dt><strong><%= model_class.human_attribute_name(:admission_date) %>:</strong></dt>
-  <dd><%= @member.admission_date %></dd>
+  <% if @member.admission_date != nil %>
+  <dd><%= @member.admission_date.strftime("%d-%m-%Y") %></dd>
+  <% else %>
+  <dd></dd>
+  <% end %>
+<hr/>
   <dt><strong><%= model_class.human_attribute_name(:last_fee_date) %>:</strong></dt>
-  <dd><%= @member.last_fee_date %></dd>
+  <% if @member.last_fee_date != nil %>
+  <dd><%= @member.last_fee_date.strftime("%d-%m-%Y") %></dd>
+  <% else %>
+  <dd>Not yet set (will be set after paying fee)</dd>
+  <% end %>
+<hr/>
   <dt><strong><%= model_class.human_attribute_name(:next_fee_date) %>:</strong></dt>
-  <dd><%= @member.next_fee_date %></dd>
+  <% if @member.next_fee_date != nil %>
+  <dd><%= @member.next_fee_date.strftime("%d-%m-%Y") %></dd>
+  <% else %>
+  <dd>Not yet set (will be set after paying fee)</dd>
+  <% end %>
+ <hr/>
   <dt><strong><%= model_class.human_attribute_name(:status) %>:</strong></dt>
   <dd><%= @member.status %></dd>
+<hr/>
   <dt><strong><%= model_class.human_attribute_name(:amount) %>:</strong></dt>
   <dd><%= @member.amount %></dd>
 </dl>
-
+<hr/>
+<div class="row">
+<div class="col-xs-4">
 <%= link_to t('.back', :default => t("helpers.links.back")),
-              members_path, :class => 'btn btn-default'  %>
+              members_path, :class => 'btn btn-default btn-xs'  %>
+</div>
+<div class="col-xs-4">
 <%= link_to t('.edit', :default => t("helpers.links.edit")),
-              edit_member_path(@member), :class => 'btn btn-default' %>
+              edit_member_path(@member), :class => 'btn btn-info btn-xs' %>
+</div>
+<div class="col-xs-4">
 <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
               member_path(@member),
               :method => 'delete',
               :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
-              :class => 'btn btn-danger' %>
+              :class => 'btn btn-danger btn-xs' %>
+</div>
+</div>   <!-- row -->

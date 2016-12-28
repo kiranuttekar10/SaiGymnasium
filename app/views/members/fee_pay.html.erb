@@ -2,43 +2,72 @@
 $(document).ready(function(){
 $('#new').click(function(){
    
-    if($('.containernew').css("display") == "none" )
+    if($('.containernew').css("display") == "block" )
     {
     $('.containerold').hide();
-    $('.containernew').show();
+    $('.containerreset').hide();
+    $('.containernew').hide();
     
     }
     else
     {
-     alert("You are already on the New Admission form");
+      $('.containerold').hide();
+      $('.containerreset').hide();
+      $('.containernew').show();
     }
 });
 $('#old').click(function(){
-    if($('.containerold').css("display") == "none")
+    if($('.containerold').css("display") == "block")
     {
+    $('.containerold').hide();
+    $('.containerreset').hide();
     $('.containernew').hide();
-    $('.containerold').show();
     }
     else
     {
-     alert("You are already on the Old Admission form");
+     $('.containerreset').hide();
+     $('.containernew').hide();
+     $('.containerold').show();
+    }
+});
+$('.reset').click(function(){
+    if($('.containerreset').css("display") == "block")
+    {
+     $('.containerold').hide();
+    $('.containerreset').hide();
+    $('.containernew').hide();
+    }
+    else
+    {
+     $('.containernew').hide();
+      $('.containerold').hide();
+    $('.containerreset').show();
+    
     }
 });
 });
 </script>
+<div class="row page-header text-center">
+    <h4>Fee Pay Section</h4>    
+</div>
 <div class="row">
     <div class="col-xs-12">
-        <div class="col-xs-6">
-            <button id="new">For New Admission</button> 
+        <div class="col-xs-4">
+            <button id="new">New Member</button> 
         </div>  
-        <div class="col-xs-6">
-            <button id="old">Regular Members</button>   
+        <div class="col-xs-4 ">
+            <button class="reset">Reset Member</button> 
+        </div>
+        
+        <div class="col-xs-4">
+            <button id="old">Regular Member</button>   
         </div> 
     </div>
 </div>
 
 <div class="containernew" style="display:none;">
     <hr/>
+    <p><strong>Note:</strong>You have clicked on New member button</p>
     <div class="row">
         <div class="col-xs-12">
             <div class="page-header">
@@ -50,8 +79,8 @@ $('#old').click(function(){
     </div> 
     <div class="row">
         <div class="col-xs-10 col-xs-offset-1 form-custom"> 
-            <div class="page-header"><h4>Fill the form</h4></div>
-            <%= simple_form_for @member, :html => { :class => 'form-horizontal' } do |f| %>
+            <div class="page-header"><h4>Fill the form (New Member)</h4></div>
+            <%= simple_form_for @member,url: {:controller => 'members',:action => 'fee_pay_new',:id => @member},method: :post, :html => { :class => 'form-horizontal' } do |f| %>
               
               <%= f.input :status,as: :select,collection: [['Unpaid','Unpaid'],['Paid','Paid']],include_blank: false,prompt: "Please Select Status or it will be automatically set" %>
               <%= f.input :amount,as: :select,collection: [['500',500],['1100',1100]],include_blank: false,prompt: "Please select the amount" %>
@@ -59,9 +88,15 @@ $('#old').click(function(){
             <hr/>
               <%= f.button :submit, :class => 'btn-primary btn-xs' %>
               <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
-                        members_path, :class => 'btn btn-default btn-xs' %>
+                        {:controller => 'members',:action=> 'fee_pay',:id =>@member}, :class => 'btn btn-default btn-sm' %>
+              
             <% end %>
+           
         </div>
+    </div>
+    <div class="row">
+        <hr/>
+        <button class="reset">Reset the Members Date</button> 
     </div>
       
 </div>
@@ -69,6 +104,7 @@ $('#old').click(function(){
 
 <div class="containerold" style="display:none;">
     <hr/>
+    <p><strong>Note:</strong>You have clicked on Regular member button</p>
     <div class="row">   
         <div class="col-xs-12" >
             <div class="page-header">
@@ -80,8 +116,8 @@ $('#old').click(function(){
     </div> 
     <div class="row">   
         <div class="col-xs-10 col-xs-offset-1 form-custom" >
-            <div class="page-header"><h4>Fill the form</h4></div>
-            <%= simple_form_for @member, :html => { :class => 'form-horizontal' } do |f| %>
+            <div class="page-header"><h4>Fill the form (Regular Member)</h4></div>
+            <%= simple_form_for @member,url: {:controller => 'members',:action => 'fee_pay_regular',:id => @member},method: :post, :html => { :class => 'form-horizontal' } do |f| %>
               
               <%= f.input :status,as: :select,collection: [['Unpaid','Unpaid'],['Paid','Paid']],include_blank: false,prompt: "Please Select Status or it will be automatically set" %>
               <%= f.input :amount,as: :select,collection: [['400',400],['1000',1000]],include_blank: false %>
@@ -89,8 +125,45 @@ $('#old').click(function(){
             <hr/>
               <%= f.button :submit, :class => 'btn-primary btn-sm' %>
               <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
-                            members_path, :class => 'btn btn-default btn-sm' %>
+                        {:controller => 'members',:action=> 'fee_pay',:id =>@member}, :class => 'btn btn-default btn-sm' %>
+            <% end %>
+            
+        </div>
+    </div>
+    <div class="row">
+        <hr/>
+        <button class="reset">Reset the Members Date</button> 
+    </div>
+</div>            <!-- container for new member -->
+
+<div class="containerreset" style="display:none;">
+    <hr/>
+    <p><strong>Note:</strong>You have clicked on Reset member button</p>
+    <div class="row">   
+        <div class="col-xs-12" >
+            <div class="page-header">
+            <h4>Member Details</h4>
+            </div>
+            <p><strong>Member Name : </strong><%= @member.name %></p>
+            <p><strong>Admission Date : </strong><%= @member.admission_date %></p>
+            <p><strong>Last Fee Date: </strong><%= @member.last_fee_date %></p>
+            <p><strong>Next Fee Date : </strong><%= @member.next_fee_date %></p>
+        </div>
+    </div> 
+    <div class="row">   
+        <div class="col-xs-10 col-xs-offset-1 form-custom" >
+            <div class="page-header"><h4>Fill the form (Regular Member)</h4></div>
+            <%= simple_form_for @member,url: {:controller => 'members',:action => 'member_reset',:id => @member},method: :post, :html => { :class => 'form-horizontal' } do |f| %>
+              <%= f.input :last_fee_date ,label: "Set The last fee date ",hint: "You have select the date otherwise today's date will be set" %>
+               <%= f.input :next_fee_date ,label: "Set The last fee date ",hint: "You have select the date otherwise today's date will be set" %>
+              <%= f.input :status,as: :select,collection: [['Unpaid','Unpaid'],['Paid','Paid']],include_blank: false,prompt: "Please Select Status or it will be automatically set" %>
+              <%= f.input :amount,as: :select,collection: [['400',400],['1000',1000]],include_blank: false %>
+              
+            <hr/>
+              <%= f.button :submit, :class => 'btn-primary btn-sm' %>
+              <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                        {:controller => 'members',:action=> 'fee_pay',:id =>@member}, :class => 'btn btn-default btn-sm' %>
             <% end %>
         </div>
     </div>
-</div>
+</div>   <!--for setting the dates
