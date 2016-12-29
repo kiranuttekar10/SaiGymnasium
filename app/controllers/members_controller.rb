@@ -1,14 +1,14 @@
 class MembersController < ApplicationController
   before_action :authenticate_user!
   before_action :set_member, only: [:show, :edit, :update, :destroy,:fee_pay,:fee_pay_regular,:fee_pay_new,:member_reset ,:reset]
-
+  require 'will_paginate/array'
   # GET /members
   # GET /members.json
   def index
     if params[:search]
-      @members = Member.search(params[:search])
+      @members = Member.search(params[:search]).paginate(:page => params[:page], :per_page => 15)
     else  
-      @members = Member.all
+      @members = Member.all.paginate(:page => params[:page],:per_page => 15)
       @members.each do |member|
         if member.next_fee_date != nil   
           if member.next_fee_date < Date.today 
@@ -38,31 +38,34 @@ class MembersController < ApplicationController
   
   def pending_fee
     @membersall = Member.all
-    @members =[ ]
+    @memberstotal =[ ]
     @membersall.each do |member|
       if member.next_fee_date != nil 
       if member.next_fee_date < Date.today 
       
-          @members << member
+          @memberstotal << member
       end
       else
-         @members << member
+         @memberstotal << member
       end
     end
+    @members = @memberstotal.paginate(:page => params[:page], :per_page => 15)
+    
   end
   
   def upcoming_fee
     @membersall =Member.all
-    @members = []
+    @memberstotal = []
     @membersall.each do |member|
       if member.next_fee_date != nil
       if member.next_fee_date < (Date.today + 4.days) && member.Paid!
-        @members << member
+        @memberstotal << member
       end
       else
-        @members << member
+        @memberstotal << member
       end
     end
+    @members = @memberstotal.paginate(:page => params[:page],:per_page => 15)
   end
 
   # GET /members/1
@@ -100,11 +103,21 @@ class MembersController < ApplicationController
   def fee_pay_regular
     attributes = fee_regular_params.clone
     if attributes[:amount] == "400"
+      if @member.last_fee_Date != nil &&  @member.next_fee_date != nil 
       @member.last_fee_date = @member.next_fee_date
       @member.next_fee_date = @member.next_fee_date + 31.days
+      else
+      @member.last_fee_date = Date.today
+      @member.next_fee_date = Date.today + 31.days
+      end
     elsif attributes[:amount] == "1000"
+      if @member.last_fee_date != nil && @member.next_fee_date != nil 
       @member.last_fee_date = @member.next_fee_date
       @member.next_fee_date = @member.next_fee_date + 3.month
+      else
+      @member.last_fee_date = Date.today
+      @member.next_fee_date = Date.today + 3.month
+      end
     end
     respond_to do |format|
       if @member.update(fee_regular_params) && @member.save
@@ -158,7 +171,7 @@ class MembersController < ApplicationController
         format.json { render :show, status: :ok, location: @member }
       else
         format.html { redirect_to(request.env['HTTP_REFERER']) }
-        flash[:alert] = "Please Click the RESET button and fill the form again"
+        flash[:alert] = "Please fill the form again"
       end
     end
   end

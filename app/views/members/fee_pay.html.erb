@@ -53,14 +53,14 @@ $('.reset').click(function(){
 <div class="row">
     <div class="col-xs-12">
         <div class="col-xs-4">
-            <button id="new">New Member</button> 
+            <button id="new" class="btn btn-primary btn-xs">New Member</button> 
         </div>  
         <div class="col-xs-4 ">
-            <button class="reset">Reset Member</button> 
+            <button class="reset btn btn-warning btn-xs">Reset Member</button> 
         </div>
         
         <div class="col-xs-4">
-            <button id="old">Regular Member</button>   
+            <button id="old" class="btn btn-success btn-xs">Regular Member</button>   
         </div> 
     </div>
 </div>
@@ -74,7 +74,21 @@ $('.reset').click(function(){
             <h4>New Members Fee</h4>
             </div>
             <p><strong>Member Name : </strong><%= @member.name %></p>
-            <p><strong>Admission Date : </strong><%= @member.admission_date %></p>
+            <p><strong>Admission Date : </strong><%= @member.admission_date.strftime("%d-%m-%Y") %></p>
+            <p><strong>Last Fee Date : </strong>
+            <% if @member.last_fee_date != nil %>
+            <%= @member.last_fee_date.strftime("%d-%m-%Y") %>
+            <% else %>
+            Not Yet Set You have to pay fee to update the last fee date and next fee date
+            <% end %>
+            </p>
+            <p><strong>Next Fee Date : </strong>
+            <% if @member.next_fee_date != nil %>
+            <%= @member.next_fee_date.strftime("%d-%m-%Y") %>
+            <% else %>
+            Not Yet Set You have to pay fee to update the last fee date and next fee date
+            <% end %>
+            </p>
         </div>
     </div> 
     <div class="row">
@@ -96,7 +110,7 @@ $('.reset').click(function(){
     </div>
     <div class="row">
         <hr/>
-        <button class="reset">Reset the Members Date</button> 
+        <button class="reset btn btn-warning btn-xs">Reset the Members Date</button> 
     </div>
       
 </div>
@@ -111,13 +125,27 @@ $('.reset').click(function(){
             <h4>Regular Members</h4>
             </div>
             <p><strong>Member Name : </strong><%= @member.name %></p>
-            <p><strong>Admission Date : </strong><%= @member.admission_date %></p>
+            <p><strong>Admission Date : </strong><%= @member.admission_date.strftime("%d-%m-%Y") %></p>
+            <p><strong>Last Fee Date : </strong>
+            <% if @member.last_fee_date != nil %>
+            <%= @member.last_fee_date.strftime("%d-%m-%Y") %>
+            <% else %>
+            Not Yet Set You have to pay fee to update the last fee date and next fee date
+            <% end %>
+            </p>
+            <p><strong>Next Fee Date : </strong>
+            <% if @member.next_fee_date != nil %>
+            <%= @member.next_fee_date.strftime("%d-%m-%Y") %>
+            <% else %>
+            Not Yet Set You have to pay fee to update the last fee date and next fee date
+            <% end %>
+            </p>
         </div>
     </div> 
     <div class="row">   
         <div class="col-xs-10 col-xs-offset-1 form-custom" >
             <div class="page-header"><h4>Fill the form (Regular Member)</h4></div>
-            <%= simple_form_for @member,url: {:controller => 'members',:action => 'fee_pay_regular',:id => @member},method: :post, :html => { :class => 'form-horizontal' } do |f| %>
+            <%= simple_form_for @member,url: {:controller => 'members',:action => 'fee_pay_regular',:id => @member},:method => 'post', :html => { :class => 'form-horizontal' } do |f| %>
               
               <%= f.input :status,as: :select,collection: [['Unpaid','Unpaid'],['Paid','Paid']],include_blank: false,prompt: "Please Select Status or it will be automatically set" %>
               <%= f.input :amount,as: :select,collection: [['400',400],['1000',1000]],include_blank: false %>
@@ -132,7 +160,7 @@ $('.reset').click(function(){
     </div>
     <div class="row">
         <hr/>
-        <button class="reset">Reset the Members Date</button> 
+        <button class="reset btn btn-warning btn-xs">Reset the Members Date</button> 
     </div>
 </div>            <!-- container for new member -->
 
@@ -145,9 +173,21 @@ $('.reset').click(function(){
             <h4>Member Details</h4>
             </div>
             <p><strong>Member Name : </strong><%= @member.name %></p>
-            <p><strong>Admission Date : </strong><%= @member.admission_date %></p>
-            <p><strong>Last Fee Date: </strong><%= @member.last_fee_date %></p>
-            <p><strong>Next Fee Date : </strong><%= @member.next_fee_date %></p>
+            <p><strong>Admission Date : </strong><%= @member.admission_date.strftime("%d-%m-%Y") %></p>
+            <p><strong>Last Fee Date : </strong>
+            <% if @member.last_fee_date != nil %>
+            <%= @member.last_fee_date.strftime("%d-%m-%Y") %>
+            <% else %>
+            Not Yet Set You have to pay fee to update the last fee date and next fee date
+            <% end %>
+            </p>
+            <p><strong>Next Fee Date : </strong>
+            <% if @member.next_fee_date != nil %>
+            <%= @member.next_fee_date.strftime("%d-%m-%Y") %>
+            <% else %>
+            Not Yet Set You have to pay fee to update the last fee date and next fee date
+            <% end %>
+            </p>
         </div>
     </div> 
     <div class="row">   
