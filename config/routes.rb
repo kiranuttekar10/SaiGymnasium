@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
-  devise_for :users
- 
+  devise_for :users , :skip => [:registrations] 
+  get '/users/sign_up', to: redirect('/404.html')
   root 'members#index'
   #get 'members/pending_fee',to: 'members#pending_fee'
   get 'members/fee_pay/:id' => 'members#fee_pay'

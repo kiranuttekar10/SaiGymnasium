@@ -1,11 +1,11 @@
 
-<div class="col-xs-12">
+<div class="col-xs-12 form-custom">
 <%= simple_form_for @member, :html => { :class => 'form-horizontal' } do |f| %>
   <%= f.input :name %>
   
   <%= f.input :admission_date %>
   
-  <%= f.input :status %>
+  <%= f.input :status,disabled: true %>
   
   <%= f.input :amount,as: :radio_buttons,collection: [['500',500],['400',400],['1100',1100],['1000',1000]] %>
   
