@@ -17,7 +17,7 @@
 //= require twitter/bootstrap
 //= require turbolinks
 //= require_tree .
-$ready = 
+//$ready = 
 // functions
 document.addEventListener("turbolinks:load", function(){
   $("#search-member-autocomplete").autocomplete({
@@ -25,6 +25,6 @@ document.addEventListener("turbolinks:load", function(){
   })
 })
 
-$(document).ready(ready)
-$(document).on('page:load', ready)
+
+
 

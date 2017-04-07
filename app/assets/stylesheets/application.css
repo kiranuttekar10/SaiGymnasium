@@ -27,6 +27,13 @@ body {
     background-color:green; 
     padding:2px 2px 2px 2px;
 }
+#button-style-inactive {
+    border:1px solid black;
+    border-radius:2px;
+    color:#000;
+    background-color:yellow; 
+    padding:2px 2px 2px 2px;
+}
 #button-style-unpaid {
     border:1px solid black;
     border-radius:2px;
@@ -45,6 +52,12 @@ body {
 .nav.navbar-nav li a {
     color:white;
     font-size:1em;
+    
+}
+
+.nav.navbar-nav li a:hover {
+    background-color: #444;
+    
     
 }
 .border {
@@ -71,7 +84,6 @@ p {
     border-radius:2px;
     padding:5px 5px 5px 5px;
     
-
 }
 .inner-box {
     border:2px dotted black;
@@ -85,11 +97,27 @@ input[type="text"], input[type="password"], input[type="date"], input[type="date
  
 }
 .form-custom {
-    border:2px solid gray;
+   /* border:1px solid gray;*/
     border-radius:5px;
-    padding:5px 5px 5px 5px;
+    padding:10px 10px 10px 10px;
+}
+
+.form-custom-reset {
+    border:1px solid gray;
+    border-radius:5px;
+    padding:10px 10px 10px 10px;
 }
 .form-horizontal .form-group {
     margin-left:0px;
     margin-right:0px;
+}
+.btn.btn-success.btn-xs{
+    color:#fff;
+}
+.btn.btn-primary {
+    color:#fff;
+}
+
+.btn.btn-xs.btn-danger {
+    color:#fff;
 }

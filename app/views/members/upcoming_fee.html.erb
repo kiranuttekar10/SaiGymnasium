@@ -9,12 +9,21 @@ $(function(){
 <div class="page-header">
   <h3>Upcoming Fees</h3>
 </div>
-<%= form_tag members_path, :method => 'get' do %>
+<%= form_tag upcoming_fee_members_path, :method => 'get' do %>
         
         <div>
-        <div >Name of member: </div>
-            <%= text_field_tag :search, params[:search],id: 'search-member-autocomplete' %>
-            <%= submit_tag "Search", :name => nil,class: "btn btn-info btn-sm" %>
+        <div ><strong>Name of member:</strong> </div>
+            <div class="row">
+              <div class="col-xs-5">
+                 <%= text_field_tag :search, params[:search],id: 'search-member-autocomplete',class: "form-control" %>
+              </div>
+              <div class="col-xs-1">
+                <%# submit_tag "Search", :name => nil,class: "btn btn-info btn-sm" %>
+                <button type="submit"  class="btn btn-info btn-sm" ><span class="glyphicon glyphicon-search"></span></button>
+              </div>
+            </div>
+           
+           
        </div>
 <% end %>
 <hr/>
@@ -49,12 +58,19 @@ $(function(){
         
         <td>
           <% if member.next_fee_date != nil %>
-          <% if member.next_fee_date < Date.today || member.Unpaid? %>
-          <%= link_to 'Fee Pay',
+         <% if (member.next_fee_date < Date.today && member.next_fee_date > (Date.today - 1.month)) && member.Unpaid? %>
+          <button type="button" data-toggle="modal" data-id="<%= member.id %>" data-target="#mymodalmember_<%= member.id %>">Update fee</button>
+          <%#link_to 'Fee Pay',
                       {:controller =>'members',:action => 'fee_pay' , :id => member}, :class => 'btn btn-default btn-xs' %>
           <% end %>
+          <% if  member.next_fee_date < (Date.today - 1.month) %>
+          <%# link_to 'Fee Pay',
+                      {:controller => 'members',:action => 'fee_pay',:id => member}, :class => 'btn btn-default btn-xs' %>
+          <%= link_to 'Reset' ,member_date_change_path(member) ,class: "btn btn-success btn-xs" %>
+          <% end %>
           <% else %>
-          <%= link_to 'Fee Pay',
+          <button type="button" data-toggle="modal" data-id="<%= member.id %>" data-target="#mymodalmember_<%= member.id %>">Update fee</button>
+          <%# link_to 'Fee Pay',
                       {:controller =>'members',:action => 'fee_pay' , :id => member}, :class => 'btn btn-default btn-xs' %>
           <% end %>
           
@@ -67,16 +83,104 @@ $(function(){
                       :class => 'btn btn-xs btn-danger' %>
         </td>
       </tr>
+      
+   <!-- Modal -->
+      
+<%= simple_form_for(member,:url => {:controller=> 'members',:action => 'update_fee',:id =>member.id},method: :post,remote: true) do |f| %>
+<div class="modal fade" id="mymodalmember_<%= member.id %>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Update Member's fee</h4>
+      </div>
+      <div class="modal-body">
+        
+        <% if member.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(member.errors.count, "error") %> prohibited this pony from being saved:</h2>
+
+      <ul>
+      <% member.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+        
+      <% end %>
+      </ul>
+      
+    </div>
+  		<% end %>
+  		
+  	<div id="errordiv" style="display:none;color:red;">Please select the amount</div>
+  	<br/>
+	  <div class="field">
+	     <%= f.label :amount ,"Amount" %>
+	     <%= f.input :amount,label: false,as: :radio_buttons , collection: [["600",600],["1500",1500]] %>
+	     <!--<p><input id="member_amount_600" name="member[amount]" type="radio" value="600" />
+	     <label class="collection_radio_buttons" for="member_amount_600">600</label></p>
+	     <p><input id="member_amount_1500" name="member[amount]" type="radio" value="1500" />
+	     <label class="collection_radio_buttons" for="member_amount_1500">1500</label></p>-->
+	  </div>
+	  
+      </div>                 <!-- end of modal body -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" id="myModalponyclose" data-dismiss="modal">Close</button>
+        <%= f.button :submit,  "Save Changes" ,class: 'btn btn-primary btn-sm' %>
+        <% end %>               <!-- end of simple-form -->
+      </div>
+    </div>
+  </div>
+</div>                      <!-- end of modal-->    
+      
     <% end %>
   </tbody>
 </table>
 
-<%= link_to t('.new', :default => t("helpers.links.new")),
+<%# link_to t('.new', :default => t("helpers.links.new")),
             new_member_path,
             :class => 'btn btn-primary' %>
+<a href="<%= new_member_path%>" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Add</a>
 <hr/>
 <div>
   <% if @members != nil %>
   <%= will_paginate @memebers %>
   <% end%>
 </div>
+
+
+<script>
+$(document).ready(function() {
+      
+      
+     $('.edit_member').submit(function(){
+       if(document.getElementById('member_amount_600').checked == false && document.getElementById('member_amount_1500').checked == false)
+       {
+        // document.getElementById('errordiv').innerHTML = 'Please select the amount';
+         $('#errordiv').show();
+         return false;
+       }
+       else
+       {
+         return true; 
+       }
+      
+       
+     });
+     
+      $('#mymodalmember').on('hidden.bs.modal', function(){
+            $(this).find('form').trigger('reset');
+            $('#errordiv').hide();
+      });
+     /*$('#ci').click(function(){
+       alert("hi");
+      // $('#ci').text = "kiran";
+        
+    
+     if(document.getElementById('member_amount_600').checked) {
+          alert('Check 600');
+   }else if(document.getElementById('member_amount_1500').checked) {
+  //Female radio button is checked
+    }
+     });*/
+});
+</script>

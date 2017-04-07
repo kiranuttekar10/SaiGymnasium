@@ -9,7 +9,7 @@ def self.check_validation(member)
     end
 end   
     
-    enum status: [:Unpaid ,:Paid]
+enum status: [:Unpaid ,:Paid, :Inactive]
     
 def self.search(search)
     where('name LIKE ?',"%#{search}%")
